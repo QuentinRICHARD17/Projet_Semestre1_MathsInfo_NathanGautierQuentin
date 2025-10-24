@@ -3,6 +3,7 @@
 
 int main() {
     printf("Quentin présent !!");
-    printf("gautier présent !!");
+    printf("Gautier présent !!");
+    printf("Nathan présent !!");
     return 0;
 }

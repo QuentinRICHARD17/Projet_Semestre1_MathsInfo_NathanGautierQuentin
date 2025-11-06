@@ -4,6 +4,11 @@
 
 int main() {
 
+    const char *fichier_graphe = "data/exemple1.txt";
 
+    ListeAdjacence *graphe = readGraph(fichier_graphe);
+    afficherListeAdjacence(graphe);
+    verifierGrapheMarkov(graphe);
+    
     return 0;
 }

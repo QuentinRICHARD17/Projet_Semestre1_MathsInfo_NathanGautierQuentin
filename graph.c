@@ -3,6 +3,8 @@
 #include "graph.h"
 
 
+//Etape 1
+
 Cellule* creerCellule(int arrivee, float proba) {
 
     Cellule* nouvelle = (Cellule*)malloc(sizeof(Cellule));
@@ -126,4 +128,40 @@ ListeAdjacence* readGraph(const char *filename) {
 
     return graphe; //ligne rajouter
 
+}
+
+
+//Etape 2
+
+int verifierGrapheMarkov(ListeAdjacence *graphe) {
+
+    int estMarkov = 1;
+
+    for (int i = 1; i <= graphe->taille; i++) {
+
+        float sommeProbas = 0.0;
+        Cellule *courant = graphe->listes[i]->head;
+
+        while (courant != NULL) {
+            sommeProbas = sommeProbas + courant->probabilite;
+            courant = courant->suivante;
+        }
+
+        if (sommeProbas < 0.99 || sommeProbas > 1.0) {
+
+            if (estMarkov == 1) {
+                printf("Le graphe n'est pas un graphe de Markov\n");
+            }
+
+            printf("  - la somme des probabilités du sommet %d est %.2f\n", i, sommeProbas);
+
+            estMarkov = 0;
+        }
+    }
+
+    if (estMarkov == 1) {
+        printf("Le graphe est un graphe de Markov\n");
+    }
+
+    return estMarkov;
 }

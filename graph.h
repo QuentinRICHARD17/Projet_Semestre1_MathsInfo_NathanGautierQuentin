@@ -31,8 +31,6 @@ ListeAdjacence* creerListeAdjacence(int taille);
 
 void afficherListeAdjacence(ListeAdjacence *graphe);
 
-void libererListeAdjacence(ListeAdjacence *graphe);
-
 ListeAdjacence* readGraph(const char *filename);
 
 #endif

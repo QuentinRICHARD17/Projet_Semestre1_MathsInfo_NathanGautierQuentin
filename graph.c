@@ -3,8 +3,6 @@
 #include "graph.h"
 
 
- //* 1. une fonction pour créer une « cellule »
-
 Cellule* creerCellule(int arrivee, float proba) {
 
     Cellule* nouvelle = (Cellule*)malloc(sizeof(Cellule));
@@ -14,24 +12,20 @@ Cellule* creerCellule(int arrivee, float proba) {
         return NULL;
     }
 
-    // Remplit les champs de la cellule
     nouvelle->sommet_arrivee = arrivee;
     nouvelle->probabilite = proba;
-    nouvelle->suivante = NULL; // La nouvelle cellule pointe vers rien
+    nouvelle->suivante = NULL;
 
     return nouvelle;
 }
 
 
- //* 2. une fonction pour créer une « liste » vide
-
 Liste* creerListe() {
 
     Liste* nouvelle = (Liste*)malloc(sizeof(Liste));
 
-
     if (nouvelle == NULL) {
-        printf("Erreur: Probleme d'allocation memoire \n");
+        printf("Erreur: Probleme d'allocation memoire\n");
         return NULL;
     }
 
@@ -40,8 +34,6 @@ Liste* creerListe() {
     return nouvelle;
 }
 
-
- //* 3. une fonction pour ajouter une cellule à une liste
 
 void ajouterCellule(Liste *liste, int arrivee, float proba) {
 
@@ -52,12 +44,10 @@ void ajouterCellule(Liste *liste, int arrivee, float proba) {
 }
 
 
-//* 4. une fonction pour afficher une liste
 void afficherListe(Liste *liste, int sommet_depart) {
 
     printf("Liste pour le sommet %d: [head @]", sommet_depart);
 
-    // On part de la tête de la liste
     Cellule *courant = liste->head;
 
     while (courant != NULL) {
@@ -69,13 +59,11 @@ void afficherListe(Liste *liste, int sommet_depart) {
 }
 
 
-// * 5. une fonction pour créer une liste d’adjacence ‘vide’
-
 ListeAdjacence* creerListeAdjacence(int taille) {
 
     ListeAdjacence* graphe = (ListeAdjacence*)malloc(sizeof(ListeAdjacence));
     if (graphe == NULL) {
-        printf("Erreur: Probleme d'allocation memoire pour le graphe!\n");
+        printf("Erreur: Probleme d'allocation memoire\n");
         return NULL;
     }
 
@@ -83,11 +71,11 @@ ListeAdjacence* creerListeAdjacence(int taille) {
 
     graphe->listes = (Liste**)malloc((taille + 1) * sizeof(Liste*));
     if (graphe->listes == NULL) {
-        printf("Erreur: Probleme d'allocation memoire pour le tableau de listes!\n");
+        printf("Erreur: Probleme d'allocation memoire \n");
         return NULL;
     }
 
-    // Crée une liste vide pour chaque sommet
+    // on crée une liste vide pour chaque sommet
     for (int i = 0; i <= taille; i++) {
         graphe->listes[i] = creerListe();
     }
@@ -96,15 +84,46 @@ ListeAdjacence* creerListeAdjacence(int taille) {
 }
 
 
- //* 6. Une fonction pour afficher une liste d’adjacence
-
 void afficherListeAdjacence(ListeAdjacence *graphe) {
     printf("--- Affichage de la Liste d'Adjacence (Taille: %d) ---\n", graphe->taille);
 
-    // On boucle pour chaque sommet, de 1 à 'taille'
     for (int i = 1; i <= graphe->taille; i++) {
-        // On utilise la fonction d'affichage de liste qu'on vient de créer
+
         afficherListe(graphe->listes[i], i);
     }
     printf("------------------------------------------------------\n");
+}
+
+
+ListeAdjacence* readGraph(const char *filename) {
+    FILE *file = fopen(filename, "rt");
+    int nbvert, depart, arrivee;
+    float proba;
+    ListeAdjacence* graphe; //ligne rajouter
+
+    if (file==NULL)
+     {
+         perror("Could not open file for reading");
+         exit(EXIT_FAILURE);
+     }
+     // first line contains number of vertices
+     if (fscanf(file, "%d", &nbvert) != 1)
+     {
+         perror("Could not read number of vertices");
+         exit(EXIT_FAILURE);
+     }
+
+
+    graphe = creerListeAdjacence(nbvert);//ligne rajouter
+
+    while (fscanf(file, "%d %d %f", &depart, &arrivee, &proba) == 3) {
+
+        ajouterCellule(graphe->listes[depart], arrivee, proba); //ligne rajouter
+
+    }
+
+    fclose(file);
+
+    return graphe; //ligne rajouter
+
 }

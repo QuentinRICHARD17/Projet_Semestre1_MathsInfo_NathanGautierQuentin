@@ -1,8 +1,8 @@
 #include <stdio.h>
-
+#include <stdlib.h>
+#include "graph.h"
 
 int main() {
-
 
 
     return 0;

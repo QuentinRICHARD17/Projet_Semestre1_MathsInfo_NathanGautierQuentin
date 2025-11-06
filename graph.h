@@ -33,4 +33,6 @@ void afficherListeAdjacence(ListeAdjacence *graphe);
 
 ListeAdjacence* readGraph(const char *filename);
 
+int verifierGrapheMarkov(ListeAdjacence *graphe);
+
 #endif

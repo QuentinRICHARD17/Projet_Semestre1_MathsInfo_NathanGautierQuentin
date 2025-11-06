@@ -31,7 +31,7 @@ Liste* creerListe() {
 
 
     if (nouvelle == NULL) {
-        printf("Erreur: Probleme d'allocation memoire pour la liste!\n");
+        printf("Erreur: Probleme d'allocation memoire \n");
         return NULL;
     }
 

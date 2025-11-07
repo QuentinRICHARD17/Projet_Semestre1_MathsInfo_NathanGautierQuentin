@@ -172,7 +172,7 @@ void genererFichierMermaid(ListeAdjacence *graphe, const char *nomFichier) {
 
     FILE *file = fopen(nomFichier, "wt");
     if (file == NULL) {
-        perror("Erreur: Impossible d'ouvrir le fichier de sortie Mermaid");
+        printf("Erreur: Impossible d'ouvrir le fichier de sortie Mermaid");
         return;
     }
 
@@ -183,13 +183,13 @@ void genererFichierMermaid(ListeAdjacence *graphe, const char *nomFichier) {
     fprintf(file, "flowchart LR\n");
     fprintf(file, "\n");
 
-    // MiniÉtape 1: Déclarer tous les sommets (nœuds)
+
     for (int i = 1; i <= graphe->taille; i++) {
         fprintf(file, "  %s((%d))\n", getID(i), i);
     }
     fprintf(file, "\n");
 
-    // MiniÉtape 2: Écrire toutes les arêtes (transitions)
+
     for (int i = 1; i <= graphe->taille; i++) {
         char idDepart[10];
         strcpy(idDepart, getID(i));
@@ -212,4 +212,3 @@ void genererFichierMermaid(ListeAdjacence *graphe, const char *nomFichier) {
     printf("Fichier Mermaid '%s' généré avec succès.\n", nomFichier);
 }
 
-// --- FIN ETAPE 3 ---

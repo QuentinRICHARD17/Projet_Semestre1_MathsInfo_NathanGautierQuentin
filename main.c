@@ -10,14 +10,14 @@ int main() {
     //Pour créer le fichier de sortie dans le dossier parent (../)
     const char *fichier_mermaid = "../graph_output.txt";
 
-    // --- Etape 1 ---
+    // Etape 1
     ListeAdjacence *graphe = readGraph(fichier_graphe);
     afficherListeAdjacence(graphe);
 
-    // --- Etape 2 ---
+    // Etape 2
     verifierGrapheMarkov(graphe);
 
-    // --- Etape 3 ---
+    // Etape 3
     if (graphe != NULL) {
         genererFichierMermaid(graphe, fichier_mermaid);
     }

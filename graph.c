@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "graph.h"
-
+#include "utils.h"
 
 //Etape 1
 
@@ -101,33 +102,32 @@ ListeAdjacence* readGraph(const char *filename) {
     FILE *file = fopen(filename, "rt");
     int nbvert, depart, arrivee;
     float proba;
-    ListeAdjacence* graphe; //ligne rajouter
+    ListeAdjacence* graphe;
 
     if (file==NULL)
-     {
-         perror("Could not open file for reading");
-         exit(EXIT_FAILURE);
-     }
-     // first line contains number of vertices
-     if (fscanf(file, "%d", &nbvert) != 1)
-     {
-         perror("Could not read number of vertices");
-         exit(EXIT_FAILURE);
-     }
+    {
+        perror("Could not open file for reading");
+        exit(EXIT_FAILURE);
+    }
+
+    if (fscanf(file, "%d", &nbvert) != 1)
+    {
+        perror("Could not read number of vertices");
+        exit(EXIT_FAILURE);
+    }
 
 
-    graphe = creerListeAdjacence(nbvert);//ligne rajouter
+    graphe = creerListeAdjacence(nbvert);
 
     while (fscanf(file, "%d %d %f", &depart, &arrivee, &proba) == 3) {
 
-        ajouterCellule(graphe->listes[depart], arrivee, proba); //ligne rajouter
+        ajouterCellule(graphe->listes[depart], arrivee, proba);
 
     }
 
     fclose(file);
 
-    return graphe; //ligne rajouter
-
+    return graphe;
 }
 
 
@@ -165,3 +165,51 @@ int verifierGrapheMarkov(ListeAdjacence *graphe) {
 
     return estMarkov;
 }
+
+// ETAPE 3
+
+void genererFichierMermaid(ListeAdjacence *graphe, const char *nomFichier) {
+
+    FILE *file = fopen(nomFichier, "wt");
+    if (file == NULL) {
+        perror("Erreur: Impossible d'ouvrir le fichier de sortie Mermaid");
+        return;
+    }
+
+    fprintf(file, "config:\n");
+    fprintf(file, "  layout: elk\n");
+    fprintf(file, "  theme: neo\n");
+    fprintf(file, "  look: neo\n");
+    fprintf(file, "flowchart LR\n");
+    fprintf(file, "\n");
+
+    // MiniÉtape 1: Déclarer tous les sommets (nœuds)
+    for (int i = 1; i <= graphe->taille; i++) {
+        fprintf(file, "  %s((%d))\n", getID(i), i);
+    }
+    fprintf(file, "\n");
+
+    // MiniÉtape 2: Écrire toutes les arêtes (transitions)
+    for (int i = 1; i <= graphe->taille; i++) {
+        char idDepart[10];
+        strcpy(idDepart, getID(i));
+
+        // Parcourir la liste chaînée de ce sommet
+        Cellule *courant = graphe->listes[i]->head;
+        while (courant != NULL) {
+
+            // Obtenir l'ID du sommet d'arrivée
+            char *idArrivee = getID(courant->sommet_arrivee);
+            float proba = courant->probabilite;
+
+            fprintf(file, "  %s --> |%.2f| %s\n", idDepart, proba, idArrivee);
+
+            courant = courant->suivante;
+        }
+    }
+
+    fclose(file);
+    printf("Fichier Mermaid '%s' généré avec succès.\n", nomFichier);
+}
+
+// --- FIN ETAPE 3 ---

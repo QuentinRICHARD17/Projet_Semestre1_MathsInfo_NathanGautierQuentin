@@ -35,4 +35,6 @@ ListeAdjacence* readGraph(const char *filename);
 
 int verifierGrapheMarkov(ListeAdjacence *graphe);
 
+void genererFichierMermaid(ListeAdjacence *graphe, const char *nomFichier);
+
 #endif
